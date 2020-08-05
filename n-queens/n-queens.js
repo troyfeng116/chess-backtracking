@@ -5,8 +5,13 @@ var board = document.getElementById("board");
 
 var resetButton = document.getElementById("resetButton");
 
+var backtrackButton = document.getElementById("backtrackButton");
+
 var N;
 var moves;
+/* myBoard will be a NxN array of ints. myBoard[i][j] = 0 if no queens attacking (i,j), 1 if at
+least 1 queen attacking (i,j), and 2 if queen is on (i,j). */
+var myBoard;
 
 submitButton.onclick = function() {
 	N = dimReader.value;
@@ -16,16 +21,29 @@ submitButton.onclick = function() {
 	}
 	generateBoard();
 	moves=[];
+	myBoard=[];
+	for (var i = 0; i < N; i++) {
+		var row = [];
+		for (var j = 0; j < N; j++) {
+			row.push(0);
+		}
+		myBoard.push(row);
+	}
 }
 
 resetButton.onclick = function() {
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
-			var square = document.getElementById(i+""+j);
-			square.className = square.className.substring(0,12);
-			square.innerHTML = "";
+			resetSquare(i,j);
 		}
+		myBoard[i].fill(0);
 	}
+}
+
+backtrackButton.onclick = function() {
+	var pos = moves.pop();
+	if (!pos) return;
+	removeQueen(pos[0],pos[1]);
 }
 
 function generateBoard() {
@@ -40,44 +58,107 @@ function generateBoard() {
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
 			var square = document.createElement("div");
-			if ((i+j)%2 == 0) square.className="whiteSquares";
-			else square.className="blackSquares";
+			square.className = (i+j)%2==0 ? "whiteSquares" : "blackSquares";
 			square.id=i+""+j;
 			board.appendChild(square);
 		}
 	}
-	setSquareFunctions();
+	setSquareClicks();
 }
 
-function setSquareFunctions() {
+function setSquareClicks() {
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
 			let x = i, y = j;
 			document.getElementById(x+""+y).onclick = function() {
-				squareClicked(x,y);
+				placeQueen(x,y);
 			}
 		}
 	}
 }
 
-function squareClicked(row,col) {
+function resetSquare(row,col) {
 	var square = document.getElementById(row+""+col);
-	if (square.className.search("unavailable") >= 0) return;
+	square.className = (row+col)%2==0 ? "whiteSquares" : "blackSquares";
+	square.innerHTML = "";
+	myBoard[row][col] = 0;
+}
+
+function placeQueen(row,col) {
+	if (myBoard[row][col] > 0) return;
+	var square = document.getElementById(row+""+col);
 	square.innerHTML = "Q";
+	myBoard[row][col] = 2;
 	for (var i = 0; i < N; i++) {
-		if (i != row) document.getElementById(i+""+col).className+=" unavailable";
-		if (i != col) document.getElementById(row+""+i).className+=" unavailable";
+		if (i != row && myBoard[i][col] == 0) {
+			document.getElementById(i+""+col).className+=" unavailable";
+			myBoard[i][col] = 1;
+		}
+		if (i != col && myBoard[row][i] == 0) {
+			document.getElementById(row+""+i).className+=" unavailable";
+			myBoard[row][i] = 1;
+		}
 	}
 	for (var i = 1; i < N; i++) {
 		if (row+i < N) {
-			if (col+i < N) document.getElementById((row+i)+""+(col+i)).className+=" unavailable";
-			if (col-i >= 0) document.getElementById((row+i)+""+(col-i)).className+=" unavailable";
+			if (col+i < N && myBoard[row+i][col+i] == 0) {
+				document.getElementById((row+i)+""+(col+i)).className+=" unavailable";
+				myBoard[row+i][col+i] = 1;
+			}
+			if (col-i >= 0 && myBoard[row+i][col-i] == 0) {
+				document.getElementById((row+i)+""+(col-i)).className+=" unavailable";
+				myBoard[row+i][col-i] = 1;
+			}
 		}
 		if (row-i >= 0) {
-			if (col+i < N) document.getElementById((row-i)+""+(col+i)).className+=" unavailable";
-			if (col-i >= 0) document.getElementById((row-i)+""+(col-i)).className+=" unavailable";
+			if (col+i < N && myBoard[row-i][col+i] == 0) {
+				document.getElementById((row-i)+""+(col+i)).className+=" unavailable";
+				myBoard[row-i][col+i] = 1;
+			}
+			if (col-i >= 0 && myBoard[row-i][col-i] == 0) {
+				document.getElementById((row-i)+""+(col-i)).className+=" unavailable";
+				myBoard[row-i][col-i] = 1;
+			}
 		}
 	}
 	moves.push([row,col]);
+}
+
+function removeQueen(row,col) {
+	resetSquare(row,col);
+	for (var i = 0; i < N; i++) {
+		if (i != row && isSafe(i,col)) resetSquare(i,col);
+		if (i != col && isSafe(row,i)) resetSquare(row,i);
+	}
+	for (var i = 1; i < N; i++) {
+		if (row+i < N) {
+			if (col+i < N && isSafe(row+i,col+i)) resetSquare(row+i,col+i);
+			if (col-i >= 0 && isSafe(row+i,col-i)) resetSquare(row+i,col-i);
+		}
+		if (row-i >= 0) {
+			if (col+i < N && isSafe(row-i,col+i)) resetSquare(row-i,col+i);
+			if (col-i >= 0 && isSafe(row-i,col-i)) resetSquare(row-i,col-i);
+		}
+	}
+}
+
+/* Return true if no queen is on or attacking (row,col). */
+function isSafe(row,col) {
+	if (myBoard[row][col] == 2) return false;
+	for (var i = 0; i < N; i++) {
+		if (i != row && myBoard[i][col] == 2) return false;
+		if (i != col && myBoard[row][i] == 2) return false;
+	}
+	for (var i = 1; i < N; i++) {
+		if (row+i < N) {
+			if (col+i < N && myBoard[row+i][col+i] == 2) return false;
+			if (col-i >= 0 && myBoard[row+i][col-i] == 2) return false;
+		}
+		if (row-i >= 0) {
+			if (col+i < N && myBoard[row-i][col+i] == 2) return false;
+			if (col-i >= 0 && myBoard[row-i][col-i] == 2) return false;
+		}
+	}
+	return true;
 }
 

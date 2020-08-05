@@ -31,6 +31,7 @@
 	background-color:rgb(102,51,0);
 }
 #board .unavailable {
+	background-color:red;
 	opacity:50%;
 }
 #board .unavailable:hover {
@@ -43,3 +44,11 @@
 	top:30%;
 	right:20%;
 }
+
+/* Style backtrack button */ 
+#backtrackContainer {
+	position:absolute;
+	top:40%;
+	right:20%;
+}
+

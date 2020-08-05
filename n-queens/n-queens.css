@@ -6,21 +6,20 @@
 }
 
 /* Style board */
-#boardContainer {
-	position:absolute;
-	top:50%;
-	left:50%;
-	transform:translate(-50%,-50%);
-}
 #board {
 	display:grid;
+	position:absolute;
+	top:70%;
+	left:40%;
+	transform:translate(-50%,-50%);
+	margin:50px;
 }
-#board a {
+#board div {
 	text-decoration:none;
 	display:block;
 }
 #board .whiteSquares {
-	background-color:white;
+	background-color:lightgray;
 }
 #board .blackSquares {
 	background-color:black;

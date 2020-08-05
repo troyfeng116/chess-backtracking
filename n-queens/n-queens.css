@@ -1,0 +1,27 @@
+/* Style input container */
+#inputContainer {
+	padding:10px;
+	border:1px solid black;
+	display:inline-block;
+}
+
+/* Style board */
+#boardContainer {
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+}
+#board {
+	display:grid;
+}
+#board a {
+	text-decoration:none;
+	display:block;
+}
+#board .whiteSquares {
+	background-color:white;
+}
+#board .blackSquares {
+	background-color:black;
+}

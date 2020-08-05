@@ -42,13 +42,22 @@
 #resetContainer {
 	position:absolute;
 	top:30%;
-	right:20%;
+	left:75%;
 }
 
 /* Style backtrack button */ 
 #backtrackContainer {
 	position:absolute;
 	top:40%;
-	right:20%;
+	left:75%;
 }
 
+/* Style output container */
+#outputContainer {
+	position:absolute;
+	top:50%;
+	left:75%;
+}
+#output1, #output2 {
+	font-size:30px;
+}

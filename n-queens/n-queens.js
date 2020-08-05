@@ -7,6 +7,9 @@ var resetButton = document.getElementById("resetButton");
 
 var backtrackButton = document.getElementById("backtrackButton");
 
+var queensUsedOutput = document.getElementById("output1");
+var solutionsOutput = document.getElementById("output2");
+
 var N;
 var moves;
 /* myBoard will be a NxN array of ints. myBoard[i][j] = 0 if no queens attacking (i,j), 1 if at
@@ -29,7 +32,8 @@ submitButton.onclick = function() {
 			row.push(0);
 		}
 		myBoard.push(row);
-	}
+	} 
+	updateOutput();
 }
 
 resetButton.onclick = function() {
@@ -39,12 +43,15 @@ resetButton.onclick = function() {
 		}
 		myBoard[i].fill(0);
 	}
+	moves = [];
+	updateOutput();
 }
 
 backtrackButton.onclick = function() {
 	var pos = moves.pop();
 	if (!pos) return;
 	removeQueen(pos[0],pos[1]);
+	updateOutput();
 }
 
 function generateBoard() {
@@ -73,6 +80,7 @@ function setSquareClicks() {
 			let x = i, y = j;
 			document.getElementById(x+""+y).onclick = function() {
 				placeQueen(x,y);
+				updateOutput();
 			}
 		}
 	}
@@ -127,3 +135,12 @@ function isSafe(row,col) {
 	return true;
 }
 
+function updateOutput() {
+	queensUsedOutput.innerHTML = "QUEENS USED: "+moves.length+"/"+N;
+	solutionsOutput.innerHTML = "POSSIBLE SOLUTIONS: "+numSolutionsLeft();
+}
+
+/* Return number of ways to complete board using myBoard. */
+function numSolutionsLeft() {
+	return 0;
+}

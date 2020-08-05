@@ -11,10 +11,14 @@ var queensUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
 var N;
+/* Moves holds the sequnece of (i,j) taken by user. */
 var moves;
+/* rowHasQueen[i] is true if i'th row of board has queen. */
+var rowHasQueen;
 /* myBoard will be a NxN array of ints. myBoard[i][j] = 0 if no queens attacking (i,j), 1 if at
 least 1 queen attacking (i,j), and 2 if queen is on (i,j). */
 var myBoard;
+
 const directions = [[1,1],[1,0],[1,-1],[0,1],[0,-1],[-1,1],[-1,0],[-1,-1]];
 
 submitButton.onclick = function() {
@@ -25,6 +29,7 @@ submitButton.onclick = function() {
 	}
 	generateBoard();
 	moves=[];
+	rowHasQueen=[];
 	myBoard=[];
 	for (var i = 0; i < N; i++) {
 		var row = [];
@@ -44,6 +49,7 @@ resetButton.onclick = function() {
 		myBoard[i].fill(0);
 	}
 	moves = [];
+	rowHasQueen=[];
 	updateOutput();
 }
 
@@ -91,6 +97,7 @@ function resetSquare(row,col) {
 	square.className = (row+col)%2==0 ? "whiteSquares" : "blackSquares";
 	square.innerHTML = "";
 	myBoard[row][col] = 0;
+	rowHasQueen[row] = false;
 }
 
 function placeQueen(row,col) {
@@ -98,6 +105,7 @@ function placeQueen(row,col) {
 	var square = document.getElementById(row+""+col);
 	square.innerHTML = "Q";
 	myBoard[row][col] = 2;
+	rowHasQueen[row] = true;
 	for (var dist = 1; dist < N; dist++) {
 		for (var d = 0; d < 8; d++) {
 			var i = row + dist*(directions[d][0]);
@@ -113,6 +121,7 @@ function placeQueen(row,col) {
 
 function removeQueen(row,col) {
 	resetSquare(row,col);
+	rowHasQueen[row] = false;
 	for (var dist = 1; dist < N; dist++) {
 		for (var d = 0; d < 8; d++) {
 			var i = row + dist*(directions[d][0]);

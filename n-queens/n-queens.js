@@ -4,6 +4,7 @@ var submitButton = document.getElementById("submitButton");
 var board = document.getElementById("board");
 
 var N;
+var squares;
 
 submitButton.onclick = function() {
 	N = dimReader.value;
@@ -32,4 +33,37 @@ function generateBoard() {
 			board.appendChild(square);
 		}
 	}
+	setSquareFunctions();
 }
+
+function setSquareFunctions() {
+	for (var i = 0; i < N; i++) {
+		for (var j = 0; j < N; j++) {
+			let x = i, y = j;
+			document.getElementById(x+""+y).onclick = function() {
+				squareClicked(x,y);
+			}
+		}
+	}
+}
+
+function squareClicked(row,col) {
+	var square = document.getElementById(row+""+col);
+	if (square.className.search("unavailable") >= 0) return;
+	square.innerHTML = "Q";
+	for (var i = 0; i < N; i++) {
+		if (i != row) document.getElementById(i+""+col).className+=" unavailable";
+		if (i != col) document.getElementById(row+""+i).className+=" unavailable";
+	}
+	for (var i = 1; i < N; i++) {
+		if (row+i < N) {
+			if (col+i < N) document.getElementById((row+i)+""+(col+i)).className+=" unavailable";
+			if (col-i >= 0) document.getElementById((row+i)+""+(col-i)).className+=" unavailable";
+		}
+		if (row-i >= 0) {
+			if (col+i < N) document.getElementById((row-i)+""+(col+i)).className+=" unavailable";
+			if (col-i >= 0) document.getElementById((row-i)+""+(col-i)).className+=" unavailable";
+		}
+	}
+}
+

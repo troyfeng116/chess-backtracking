@@ -9,7 +9,7 @@
 #board {
 	display:grid;
 	position:absolute;
-	top:70%;
+	top:65%;
 	left:40%;
 	transform:translate(-50%,-50%);
 	margin:50px;
@@ -17,10 +17,20 @@
 #board div {
 	text-decoration:none;
 	display:block;
+	color:red;
+}
+#board div:hover {
+	cursor:pointer;
 }
 #board .whiteSquares {
 	background-color:lightgray;
 }
 #board .blackSquares {
 	background-color:black;
+}
+#board .unavailable {
+	opacity:50%;
+}
+#board .unavailable:hover {
+	cursor:not-allowed;
 }

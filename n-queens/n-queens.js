@@ -3,8 +3,10 @@ var submitButton = document.getElementById("submitButton");
 
 var board = document.getElementById("board");
 
+var resetButton = document.getElementById("resetButton");
+
 var N;
-var squares;
+var moves;
 
 submitButton.onclick = function() {
 	N = dimReader.value;
@@ -13,6 +15,17 @@ submitButton.onclick = function() {
 		return;
 	}
 	generateBoard();
+	moves=[];
+}
+
+resetButton.onclick = function() {
+	for (var i = 0; i < N; i++) {
+		for (var j = 0; j < N; j++) {
+			var square = document.getElementById(i+""+j);
+			square.className = square.className.substring(0,12);
+			square.innerHTML = "";
+		}
+	}
 }
 
 function generateBoard() {
@@ -65,5 +78,6 @@ function squareClicked(row,col) {
 			if (col-i >= 0) document.getElementById((row-i)+""+(col-i)).className+=" unavailable";
 		}
 	}
+	moves.push([row,col]);
 }
 

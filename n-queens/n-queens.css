@@ -13,24 +13,33 @@
 	left:40%;
 	transform:translate(-50%,-50%);
 	margin:50px;
+	border:1px solid black;
 }
 #board div {
 	text-decoration:none;
 	display:block;
 	color:red;
+	border:1px solid black;
 }
 #board div:hover {
 	cursor:pointer;
 }
 #board .whiteSquares {
-	background-color:lightgray;
+	background-color:tan;
 }
 #board .blackSquares {
-	background-color:black;
+	background-color:rgb(102,51,0);
 }
 #board .unavailable {
 	opacity:50%;
 }
 #board .unavailable:hover {
 	cursor:not-allowed;
+}
+
+/* Style reset button */ 
+#resetContainer {
+	position:absolute;
+	top:30%;
+	right:20%;
 }

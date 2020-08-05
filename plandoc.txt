@@ -1,0 +1,49 @@
+N QUEENS VISUALIZER
+Read N (1-8?)
+Generate NxN board
+	Squares tan and brown?
+	Texture?
+All squares on board clickable (<a>?)
+When square clicked:
+	Set innerHTML of square to img of queen?
+	Set all squares on row/col/diags to:
+		Color red/gray?
+		Hover: no-parking mouse symbol?
+		Should be clear which squares are available
+		Should be able to do this by changing class?
+		i.e. class available, unavailable, and queen
+		So style sheet can just style squares by classes
+	Display #ways to win?
+When backtrack button clicked:
+	Remove last placed queen
+When queen removed:
+	Unmark (simply change classes?)
+	Update display #ways to win?
+When reset board clicked:
+	Reset board and all global vars
+
+
+KNIGHTS TOUR VISUALIZER
+Read N
+Generate NxN board
+All squares clickable
+When square clicked:
+	Move knight pic from last square to this one
+	Add number corresponding to k’th knight placed
+	Highlight set of all possible next moves
+	Gray out all other squares?
+If no moves:
+	Highlight backtrack and reset buttons?
+When backtrack clicked:
+	Remove last placed knight (move img)
+	Highlight
+At each step, display #solutions left?
+	
+
+
+IDEAS:
+“Free remove mode” (remove any queen from anywhere”
+	“select queen you wish to remove”
+	highlight queen squares, gray out non-queen?
+Non square board?
+

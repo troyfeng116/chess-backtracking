@@ -38,6 +38,10 @@
 	cursor:not-allowed;
 }
 
+#board .reachable {
+	background-color:green;
+}
+
 /* Style reset button */ 
 #resetContainer {
 	position:absolute;

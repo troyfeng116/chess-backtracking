@@ -62,8 +62,36 @@ function setSquareClicks() {
 		for (var j = 0; j < N; j++) {
 			let x = i, y = j;
 			document.getElementById(x+','+y).onclick = function() {
-				
+				placeKnight(x,y);
 			}
 		}
 	}
+}
+
+function placeKnight(r,c) {
+	if (!reachable(r,c)) return;
+	var square = document.getElementById(r+','+c);
+	myBoard[r][c] = true;
+	moves.push([r,c]);
+	square.innerHTML = "K";
+	for (var i = 0; i < 8; i++) {
+		var r2 = r+directions[i][0];
+		var c2 = c+directions[i][1];
+		if (reachable(r2,c2)) {
+			document.getElementById(r2+','+c2).className += " reachable";
+		}
+	}
+}
+
+function reachable(r,c) {
+	if (r < 0 || r >= N || c < 0 || c >= N) return false;
+	if (moves.length == 0) return true;
+	if (myBoard[r][c]) return false;
+	var lastMove = moves[moves.length-1];
+	for (var i = 0; i < 8; i++) {
+		if (r+directions[i][0] == lastMove[0] && c+directions[i][1] == lastMove[1]) {
+			return true;
+		}
+	}
+	return false;
 }

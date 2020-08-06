@@ -131,6 +131,11 @@ function removeQueen(row,col) {
 	}
 }
 
+function updateOutput() {
+	queensUsedOutput.innerHTML = "QUEENS USED: "+moves.length+"/"+N;
+	solutionsOutput.innerHTML = "POSSIBLE SOLUTIONS: "+numSolutionsLeft();
+}
+
 /* Return true if no queen is on or attacking (row,col). */
 function isSafe(row,col) {
 	if (myBoard[row][col] == 2) return false;
@@ -144,12 +149,23 @@ function isSafe(row,col) {
 	return true;
 }
 
-function updateOutput() {
-	queensUsedOutput.innerHTML = "QUEENS USED: "+moves.length+"/"+N;
-	solutionsOutput.innerHTML = "POSSIBLE SOLUTIONS: "+numSolutionsLeft();
+/* Return number of ways to complete current board using myBoard. */
+function numSolutionsLeft() {
+	return backtrack(0);
 }
 
-/* Return number of ways to complete board using myBoard. */
-function numSolutionsLeft() {
-	return 0;
+function backtrack(row) {
+	if (row == N) return 1;
+	if (rowHasQueen[row]) return backtrack(row+1);
+	var ans = 0;
+	for (var col = 0; col < N; col++) {
+		if (isSafe(row,col)) {
+			rowHasQueen[row] = true;
+			myBoard[row][col] = 2;
+			ans += backtrack(row+1);
+			rowHasQueen[row] = false;
+			myBoard[row][col] = 0;
+		}
+	}
+	return ans;
 }

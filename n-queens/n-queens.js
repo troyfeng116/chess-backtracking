@@ -20,11 +20,14 @@ least 1 queen attacking (i,j), and 2 if queen is on (i,j). */
 var myBoard;
 
 const directions = [[1,1],[1,0],[1,-1],[0,1],[0,-1],[-1,1],[-1,0],[-1,-1]];
+/* Precalculated solutions to N queens problem for 1 <= N <= 13 (to allow for larger inputs
+without lag) */
+const precalculated = [0,0,0,0,2,10,4,40,92,352,724,2680,14200,73712];
 
 submitButton.onclick = function() {
 	N = dimReader.value;
-	if (isNaN(N) || N < 1 || N > 10 || N%1 != 0) {
-		alert("N must be between 1 and 10");
+	if (isNaN(N) || N < 1 || N > 13 || N%1 != 0) {
+		alert("N must be between 1 and 13");
 		return;
 	}
 	generateBoard();
@@ -34,7 +37,7 @@ submitButton.onclick = function() {
 	for (var i = 0; i < N; i++) {
 		var row = [];
 		for (var j = 0; j < N; j++) {
-			row.push(0);
+			row.push(false);
 		}
 		myBoard.push(row);
 	} 
@@ -46,7 +49,7 @@ resetButton.onclick = function() {
 		for (var j = 0; j < N; j++) {
 			resetSquare(i,j);
 		}
-		myBoard[i].fill(0);
+		myBoard[i].fill(false);
 	}
 	moves = [];
 	rowHasQueen=[];
@@ -96,23 +99,22 @@ function resetSquare(row,col) {
 	var square = document.getElementById(row+""+col);
 	square.className = (row+col)%2==0 ? "whiteSquares" : "blackSquares";
 	square.innerHTML = "";
-	myBoard[row][col] = 0;
+	myBoard[row][col] = false;
 	rowHasQueen[row] = false;
 }
 
 function placeQueen(row,col) {
-	if (myBoard[row][col] > 0) return;
+	if (myBoard[row][col]) return;
 	var square = document.getElementById(row+""+col);
 	square.innerHTML = "Q";
-	myBoard[row][col] = 2;
+	myBoard[row][col] = true;
 	rowHasQueen[row] = true;
 	for (var dist = 1; dist < N; dist++) {
 		for (var d = 0; d < 8; d++) {
 			var i = row + dist*(directions[d][0]);
 			var j = col + dist*(directions[d][1]);
-			if (i>=0 && i<N && j>=0 && j<N && myBoard[i][j] == 0) {
+			if (i>=0 && i<N && j>=0 && j<N && !myBoard[i][j]) {
 				document.getElementById(i+""+j).className+=" unavailable";
-				myBoard[i][j] = 1;
 			}
 		}
 	}
@@ -138,12 +140,12 @@ function updateOutput() {
 
 /* Return true if no queen is on or attacking (row,col). */
 function isSafe(row,col) {
-	if (myBoard[row][col] == 2) return false;
+	if (myBoard[row][col]) return false;
 	for (var dist = 1; dist < N; dist++) {
 		for (var d = 0; d < 8; d++) {
 			var i = row + dist*(directions[d][0]);
 			var j = col + dist*(directions[d][1]);
-			if (i>=0 && i<N && j>=0 && j<N && myBoard[i][j] == 2) return false;
+			if (i>=0 && i<N && j>=0 && j<N && myBoard[i][j]) return false;
 		}
 	}
 	return true;
@@ -151,9 +153,11 @@ function isSafe(row,col) {
 
 /* Return number of ways to complete current board using myBoard. */
 function numSolutionsLeft() {
+	if (moves.length == 0) return precalculated[N];
 	return backtrack(0);
 }
 
+/* Auxiliary backtracking function: for each safe spot in row, place queen, recurse, and backtrack. */
 function backtrack(row) {
 	if (row == N) return 1;
 	if (rowHasQueen[row]) return backtrack(row+1);
@@ -161,10 +165,10 @@ function backtrack(row) {
 	for (var col = 0; col < N; col++) {
 		if (isSafe(row,col)) {
 			rowHasQueen[row] = true;
-			myBoard[row][col] = 2;
+			myBoard[row][col] = true;
 			ans += backtrack(row+1);
 			rowHasQueen[row] = false;
-			myBoard[row][col] = 0;
+			myBoard[row][col] = false;
 		}
 	}
 	return ans;

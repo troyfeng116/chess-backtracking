@@ -7,6 +7,8 @@ var resetButton = document.getElementById("resetButton");
 
 var backtrackButton = document.getElementById("backtrackButton");
 
+var completeButton = document.getElementById("completeButton");
+
 var knightsUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
@@ -15,7 +17,7 @@ var N;
 var moves;
 var myBoard;
 
-const directions = [[2,1],[2,-1],[1,2],[1,-2],[-1,2],[-1,-2],[-2,1],[-2,-1]];
+const directions = [[2,1],[1,2],[-1,2],[-2,1],[-2,-1],[-1,-2],[1,-2],[2,-1]];
 
 submitButton.onclick = function() {
 	N = dimReader.value;
@@ -49,11 +51,16 @@ resetButton.onclick = function() {
 			var square = document.getElementById(i+','+j);
 			square.className = (i+j)%2==0 ? "whiteSquares" : "blackSquares";
 			square.innerHTML = "";
+			square.style.borderColor="black";
 		}
 		myBoard[i].fill(false);
 	}
 	moves = [];
 	updateOutput();
+}
+
+completeButton.onclick = function() {
+	warnsdorff();
 }
 
 /* Generate NxN chessboard. */
@@ -105,13 +112,18 @@ function placeKnight(r,c) {
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
 	moves.push([r,c]);
-	square.innerHTML = "K";
+	square.innerHTML = 'K'+moves.length;
+	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
 		var c2 = c+directions[i][1];
 		if (reachable(r2,c2)) {
 			document.getElementById(r2+','+c2).className += " reachable";
 		}
+	}
+	if (moves.length > 1) {
+		var lastSquare = document.getElementById(moves[moves.length-2][0]+','+moves[moves.length-2][1]);
+		lastSquare.style.borderColor = "black";
 	}
 }
 
@@ -130,6 +142,7 @@ function removeKnight(r,c) {
 	myBoard[r][c] = false;
 	moves.pop();
 	document.getElementById(r+','+c).innerHTML = "";
+	document.getElementById(r+','+c).style.borderColor = "black";
 	if (moves.length != 0) {
 		var previousMove = moves[moves.length-1];
 		for (var i = 0; i < 8; i++) {
@@ -139,6 +152,7 @@ function removeKnight(r,c) {
 				document.getElementById(r2+','+c2).className += " reachable";
 			}
 		}
+		document.getElementById(previousMove[0]+','+previousMove[1]).style.borderColor = "red";
 	}
 }
 
@@ -155,6 +169,58 @@ function reachable(r,c) {
 	return false;
 }
 
+function isSafe(r,c) {
+	return r >= 0 && r < N && c >= 0 && c < N && !myBoard[r][c];
+}
+
 function updateOutput() {
 	knightsUsedOutput.innerHTML = "KNIGHTS USED: "+moves.length+"/"+N*N;
 }
+
+/* Return number of available moves from (r,c). */
+function getDegree(r,c) {
+	var count = 0;
+	for (var i = 0; i < 8; i++) {
+		var r2 = r+directions[i][0];
+		var c2 = c+directions[i][1];
+		if (isSafe(r,c)) count++;
+	}
+	return count;
+}
+
+function warnsdorff() {
+	var lastMove = moves.length==0? [0,0] : moves[moves.length-1];
+	var r = lastMove[0];
+	var c = lastMove[1];
+	for (var i = moves.length; i < N*N; i++) {
+		if (!search(r,c)) return false;
+		r = moves[moves.length-1][0];
+		c = moves[moves.length-1][1];
+		document.getElementById(r+','+c).innerHTML = 'K'+moves.length;
+	}
+	return true;
+}
+
+function search(r,c) {
+	var minDir = -1;
+	var minDegree = 9;
+	var start = Math.floor(Math.random()*(9));
+	for (var i = start; i < start+8; i++) {
+		var r2 = r+directions[i%8][0];
+		var c2 = c+directions[i%8][1];
+		if (isSafe(r2, c2)) {
+			var deg = getDegree(r2,c2);
+			if (deg > 0 && deg < minDegree) {
+				minDegree = deg;
+				minDir = i%8;
+			}
+		}
+	}
+	if (minDir == -1) return false;
+	var rMin = r+directions[minDir][0];
+	var cMin = c+directions[minDir][1]
+	moves.push([rMin,cMin]);
+	myBoard[rMin][cMin] = true;
+	return true;
+}
+

@@ -32,7 +32,28 @@ submitButton.onclick = function() {
 			row.push(false);
 		}
 		myBoard.push(row);
-	} 
+	}
+	updateOutput();
+}
+
+backtrackButton.onclick = function() {
+	var lastMove = moves.pop();
+	if (!lastMove) return;
+	removeKnight(lastMove[0],lastMove[1]);
+	updateOutput();
+}
+
+resetButton.onclick = function() {
+	for (var i = 0; i < N; i++) {
+		for (var j = 0; j < N; j++) {
+			var square = document.getElementById(i+','+j);
+			square.className = (i+j)%2==0 ? "whiteSquares" : "blackSquares";
+			square.innerHTML = "";
+		}
+		myBoard[i].fill(false);
+	}
+	moves = [];
+	updateOutput();
 }
 
 /* Generate NxN chessboard. */
@@ -63,6 +84,7 @@ function setSquareClicks() {
 			let x = i, y = j;
 			document.getElementById(x+','+y).onclick = function() {
 				placeKnight(x,y);
+				updateOutput();
 			}
 		}
 	}
@@ -70,6 +92,16 @@ function setSquareClicks() {
 
 function placeKnight(r,c) {
 	if (!reachable(r,c)) return;
+	if (moves.length != 0) {
+		var previousMove = moves[moves.length-1];
+		for (var i = 0; i < 8; i++) {
+			var r2 = previousMove[0]+directions[i][0];
+			var c2 = previousMove[1]+directions[i][1];
+			if (reachable(r2,c2)) {
+				document.getElementById(r2+','+c2).className = (r2+c2)%2==0? "whiteSquares" : "blackSquares";
+			}
+		}
+	}
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
 	moves.push([r,c]);
@@ -79,6 +111,33 @@ function placeKnight(r,c) {
 		var c2 = c+directions[i][1];
 		if (reachable(r2,c2)) {
 			document.getElementById(r2+','+c2).className += " reachable";
+		}
+	}
+}
+
+/* Given that there is a knight on (r,c), remove it. */
+function removeKnight(r,c) {
+	/* Temporarily place a knight at (r,c) and add (r,c) to moves for reachable function. */
+	myBoard[r][c] = true;
+	moves.push([r,c]);
+	for (var i = 0; i < 8; i++) {
+		var r2 = r+directions[i][0];
+		var c2 = c+directions[i][1];
+		if (reachable(r2,c2)) {
+			document.getElementById(r2+','+c2).className = (r2+c2)%2==0? "whiteSquares" : "blackSquares";
+		}
+	}
+	myBoard[r][c] = false;
+	moves.pop();
+	document.getElementById(r+','+c).innerHTML = "";
+	if (moves.length != 0) {
+		var previousMove = moves[moves.length-1];
+		for (var i = 0; i < 8; i++) {
+			var r2 = previousMove[0]+directions[i][0];
+			var c2 = previousMove[1]+directions[i][1];
+			if (reachable(r2,c2)) {
+				document.getElementById(r2+','+c2).className += " reachable";
+			}
 		}
 	}
 }
@@ -94,4 +153,8 @@ function reachable(r,c) {
 		}
 	}
 	return false;
+}
+
+function updateOutput() {
+	knightsUsedOutput.innerHTML = "KNIGHTS USED: "+moves.length+"/"+N*N;
 }

@@ -183,7 +183,7 @@ function getDegree(r,c) {
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
 		var c2 = c+directions[i][1];
-		if (isSafe(r,c)) count++;
+		if (isSafe(r2,c2)) count++;
 	}
 	return count;
 }
@@ -192,7 +192,7 @@ function warnsdorff() {
 	var lastMove = moves.length==0? [0,0] : moves[moves.length-1];
 	var r = lastMove[0];
 	var c = lastMove[1];
-	for (var i = moves.length; i < N*N; i++) {
+	for (var i = moves.length; i <= N*N; i++) {
 		if (!search(r,c)) return false;
 		r = moves[moves.length-1][0];
 		c = moves[moves.length-1][1];

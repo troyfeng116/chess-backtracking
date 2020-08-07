@@ -80,7 +80,7 @@ completeButton.onclick = function() {
 			document.getElementById(i+','+j).style.borderColor = "black";
 		}
 	}
-	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][0]).style.borderColor="red";
+	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).style.borderColor="red";
 	updateOutput();
 }
 
@@ -133,7 +133,10 @@ function placeKnight(r,c) {
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
 	userMoves.push([r,c]);
-	square.innerHTML = userMoves.length;
+	var img = document.createElement("i");
+	img.className="fas fa-chess-knight";
+	square.appendChild(img);
+	square.innerHTML += userMoves.length;
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
@@ -146,6 +149,7 @@ function placeKnight(r,c) {
 		var secondLastMove = userMoves[userMoves.length-2];
 		var lastSquare = document.getElementById(secondLastMove[0]+','+secondLastMove[1]);
 		lastSquare.style.borderColor = "black";
+		lastSquare.removeChild(lastSquare.firstChild);
 	}
 }
 
@@ -202,7 +206,7 @@ function isSafe(cBoard,r,c) {
 }
 
 function updateOutput() {
-	knightsUsedOutput.innerHTML = "KNIGHTS USED: "+userMoves.length+"/"+N*N;
+	knightsUsedOutput.innerHTML = "KNIGHTS USED:<br>"+userMoves.length+"/"+N*N;
 }
 
 /* Return number of available moves from (r,c). */

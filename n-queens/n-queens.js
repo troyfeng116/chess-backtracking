@@ -43,10 +43,15 @@ submitButton.onclick = function() {
 		myBoard.push(row);
 	} 
 	updateOutput();
+	board.style.visibility = "visible";
+	resetButton.style.visibility = "visible";
+	backtrackButton.style.visibility = "visible";
+	outputContainer.style.visibility = "visible";
 }
 
 resetButton.onclick = function() {
-	for (var i = 0; i < N; i++) {
+	if (isNaN(N)) return;
+	for (var i = 0; i < N; i++) {if (isNaN(N)) return;
 		for (var j = 0; j < N; j++) {
 			resetSquare(i,j);
 		}
@@ -58,6 +63,7 @@ resetButton.onclick = function() {
 }
 
 backtrackButton.onclick = function() {
+	if (isNaN(N)) return;
 	var pos = moves.pop();
 	if (!pos) return;
 	removeQueen(pos[0],pos[1]);

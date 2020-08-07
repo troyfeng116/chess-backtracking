@@ -1,10 +1,14 @@
 /* Style input container */
 #inputContainer {
 	padding:10px;
-	border:1px solid white;
+	border:1px solid;
 	display:inline-block;
 	background-color:tan;
 	color:rgb(102,51,0);
+	position:absolute;
+	top:40%;
+	left:10px;
+	transform:translate(0,-50%);
 }
 
 /* Style board */
@@ -16,6 +20,7 @@
 	transform:translate(-50%,-50%);
 	margin:50px;
 	border:1px solid white;
+	visibility:hidden;
 }
 #board div {
 	text-align:center;
@@ -55,6 +60,7 @@
 	position:absolute;
 	top:20%;
 	left:75%;
+	visibility:hidden;
 }
 
 /* Style backtrack button */ 
@@ -62,30 +68,40 @@
 	position:absolute;
 	top:40%;
 	left:75%;
-}
-#backtrackButton, #resetButton {
-	display:block;
-	height:75px;
-	width:200px;
-	background-color:tan;
-	font-size:24px;
-	text-transform:uppercase;
-	color:background-color:tan;
-	color:rgb(102,51,0);
+	visibility:hidden;
 }
 
 /* Style complete tour button */
 #completeButton {
 	position:absolute;
-	top:50%;
+	top:60%;
 	left:75%;
+	visibility:hidden;
 }
+
+/* Additional button styling */
+#backtrackButton, #resetButton, #completeButton {
+	display:block;
+	height:75px;
+	width:200px;
+	background-color:tan;
+	font-size:20px;
+	text-transform:uppercase;
+	color:rgb(102,51,0);
+}
+#backtrackButton:hover, #resetButton:hover, #completeButton:hover {
+	background-color:white;
+	color:rgb(0,30,80);
+	cursor:pointer;
+}
+
 
 /* Style output container */
 #outputContainer {
 	position:absolute;
-	top:60%;
+	top:80%;
 	left:75%;
+	visibility:hidden;
 }
 #output1, #output2 {
 	font-size:30px;

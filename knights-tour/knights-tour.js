@@ -9,6 +9,7 @@ var backtrackButton = document.getElementById("backtrackButton");
 
 var completeButton = document.getElementById("completeButton");
 
+var outputContainer = document.getElementById("outputContainer");
 var knightsUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
@@ -40,9 +41,15 @@ submitButton.onclick = function() {
 		myBoard.push(row);
 	}
 	updateOutput();
+	board.style.visibility = "visible";
+	resetButton.style.visibility = "visible";
+	backtrackButton.style.visibility = "visible";
+	completeButton.style.visibility = "visible";
+	outputContainer.style.visibility = "visible";
 }
 
 backtrackButton.onclick = function() {
+	if (isNaN(N)) return;
 	var lastMove = userMoves.pop();
 	if (!lastMove) return;
 	removeKnight(lastMove[0],lastMove[1]);
@@ -50,6 +57,7 @@ backtrackButton.onclick = function() {
 }
 
 resetButton.onclick = function() {
+	if (isNaN(N)) return;
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
 			var square = document.getElementById(i+','+j);
@@ -64,6 +72,7 @@ resetButton.onclick = function() {
 }
 
 completeButton.onclick = function() {
+	if (isNaN(N)) return;
 	if (fullMoves.length != N*N) {
 		updateOutput();
 		return;

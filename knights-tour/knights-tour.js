@@ -85,8 +85,8 @@ completeButton.onclick = function() {
 	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).innerHTML="";
 	var img = document.createElement("i");
 	img.className="fas fa-chess-knight";
-	img.style.fontSize=squareDim*.60+"px";
-	img.style.lineHeight=squareDim+"px";
+	img.style.fontSize=squareDim*.50+"px";
+	img.style.lineHeight=squareDim*.9+"px";
 	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).appendChild(img);
 	updateOutput();
 }
@@ -143,8 +143,8 @@ function placeKnight(r,c) {
 	var img = document.createElement("i");
 	img.className="fas fa-chess-knight";
 	img.id=userMoves.length;
-	img.style.fontSize=squareDim*.60+"px";
-	img.style.lineHeight=squareDim+"px";
+	img.style.fontSize=squareDim*.50+"px";
+	img.style.lineHeight=squareDim*.9+"px";
 	square.appendChild(img);
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
@@ -191,8 +191,8 @@ function removeKnight(r,c) {
 		document.getElementById(previousMove[0]+','+previousMove[1]).innerHTML="";
 		var img = document.createElement("i");
 		img.className="fas fa-chess-knight";
-		img.style.fontSize=squareDim*.60+"px";
-		img.style.lineHeight=squareDim+"px";
+		img.style.fontSize=squareDim*.50+"px";
+		img.style.lineHeight=squareDim*.9+"px";
 		document.getElementById(previousMove[0]+','+previousMove[1]).appendChild(img);
 	}
 }

@@ -113,8 +113,8 @@ function placeQueen(row,col) {
 	var square = document.getElementById(row+','+col);
 	var img = document.createElement("i");
 	img.className="fas fa-chess-queen";
-	img.style.fontSize=squareDim*.60+"px";
-	img.style.lineHeight=squareDim+"px";
+	img.style.fontSize=squareDim*.50+"px";
+	img.style.lineHeight=squareDim*.9+"px";
 	square.appendChild(img);
 	myBoard[row][col] = true;
 	rowHasQueen[row] = true;

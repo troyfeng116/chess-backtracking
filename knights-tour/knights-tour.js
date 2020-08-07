@@ -65,15 +65,22 @@ completeButton.onclick = function() {
 	var soFar = userMoves.length;
 	var tries = 0;
 	while (!warnsdorff() && tries < 10) {
-		submitButton.innerHTML += tries;
 		tries++;
 		userMoves = userMoves.slice(0,soFar+1);
 	}
-	for (var x = 1; x <= N*N; x++) {
+	for (var x = Math.max(soFar,1); x <= N*N; x++) {
 		var r = userMoves[x-1][0];
 		var c = userMoves[x-1][1];
+		myBoard[r][c] = true;
 		document.getElementById(r+','+c).innerHTML = x;
 	}
+	for (var i = 0; i < N; i++) {
+		for (var j = 0; j < N; j++) {
+			document.getElementById(i+','+j).className = (i+j)%2==0? "whiteSquares" : "blackSquares";
+			document.getElementById(i+','+j).style.borderColor = "black";
+		}
+	}
+	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][0]).style.borderColor="red";
 	updateOutput();
 }
 
@@ -142,7 +149,7 @@ function placeKnight(r,c) {
 	}
 }
 
-/* Given that there is a knight on (r,c), remove it. */
+/* Given that there is a knight on (r,c), remove it (backtrack). */
 function removeKnight(r,c) {
 	/* Temporarily place a knight at (r,c) and add (r,c) to userMoves for reachable function. */
 	myBoard[r][c] = true;
@@ -171,6 +178,7 @@ function removeKnight(r,c) {
 	}
 }
 
+/* Return true if (r,c) is reachable from current pos. */
 function reachable(r,c) {
 	if (r < 0 || r >= N || c < 0 || c >= N) return false;
 	if (userMoves.length == 0) return true;
@@ -220,7 +228,6 @@ function warnsdorff() {
 	if (userMoves.length == 0) {
 		var startR = Math.floor(Math.random()*N);
 		var startC = Math.floor(Math.random()*parseInt(N));
-		submitButton.innerHTML+=(startR+" "+startC+" "+N);
 		userMoves.push([startR,startC]);
 		boardCopy[startR][startC] = true;
 	}

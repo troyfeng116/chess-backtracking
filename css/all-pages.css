@@ -6,7 +6,7 @@ body {
 #head {
     text-align: center;
 }
-#head a {
+#head a,#instrHover {
 	display:block;
 	color:white;
 	vertical-align:center;
@@ -17,6 +17,7 @@ body {
 	position:absolute;
 	top:0;
 	margin:10px;
+	text-transform:uppercase;
 }
 #head .left {
 	left:0;
@@ -26,5 +27,24 @@ body {
 }
 #head a:hover {
 	background-color:tan;
-	color:rgb(102,51,0);;
+	color:rgb(102,51,0);
+}
+#instrHover {
+	font-size:15px;
+}
+#instrContainer {
+	text-align:left;
+	display:none;
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+	border:1px solid;
+	z-index:1;
+	padding:10px;
+	background-color:tan;
+	color:rgb(102,51,0);
+}
+#instrHover:hover + #instrContainer {
+	display:inline-block;
 }

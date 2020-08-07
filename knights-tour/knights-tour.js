@@ -63,7 +63,7 @@ resetButton.onclick = function() {
 			var square = document.getElementById(i+','+j);
 			square.className = (i+j)%2==0 ? "whiteSquares" : "blackSquares";
 			square.innerHTML = "";
-			square.style.borderColor="black";
+			square.style.borderColor="white";
 		}
 		myBoard[i].fill(false);
 	}
@@ -86,7 +86,7 @@ completeButton.onclick = function() {
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
 			document.getElementById(i+','+j).className = (i+j)%2==0? "whiteSquares" : "blackSquares";
-			document.getElementById(i+','+j).style.borderColor = "black";
+			document.getElementById(i+','+j).style.borderColor = "white";
 		}
 	}
 	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
@@ -157,7 +157,7 @@ function placeKnight(r,c) {
 	if (userMoves.length > 1) {
 		var secondLastMove = userMoves[userMoves.length-2];
 		var lastSquare = document.getElementById(secondLastMove[0]+','+secondLastMove[1]);
-		lastSquare.style.borderColor = "black";
+		lastSquare.style.borderColor = "white";
 		lastSquare.innerHTML = userMoves.length-1;
 	}
 }
@@ -177,7 +177,7 @@ function removeKnight(r,c) {
 	myBoard[r][c] = false;
 	userMoves.pop();
 	document.getElementById(r+','+c).innerHTML = "";
-	document.getElementById(r+','+c).style.borderColor = "black";
+	document.getElementById(r+','+c).style.borderColor = "white";
 	if (userMoves.length != 0) {
 		var previousMove = userMoves[userMoves.length-1];
 		for (var i = 0; i < 8; i++) {

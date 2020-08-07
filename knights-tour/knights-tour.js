@@ -13,6 +13,7 @@ var knightsUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
 var N;
+var squareDim;
 /* userMoves holds the sequnece of (i,j) taken by user. */
 var userMoves;
 /* fullMoves holds a sequence of (i,j) starting with userMoves, finishing the tour. */
@@ -81,6 +82,12 @@ completeButton.onclick = function() {
 		}
 	}
 	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).style.borderColor="red";
+	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).innerHTML="";
+	var img = document.createElement("i");
+	img.className="fas fa-chess-knight";
+	img.style.fontSize=squareDim*.60+"px";
+	img.style.lineHeight=squareDim+"px";
+	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).appendChild(img);
 	updateOutput();
 }
 
@@ -89,9 +96,9 @@ function generateBoard() {
 	while (board.firstChild) {
 		board.removeChild(board.firstChild);
 	}
-	var scale = N<=6? 100 : (600/N);
-	board.style.width = scale*N+"px";
-	board.style.height = scale*N+"px";
+	squareDim = N<=6? 100 : (600/N);
+	board.style.width = squareDim*N+"px";
+	board.style.height = squareDim*N+"px";
 	board.style.gridTemplateRows = "repeat("+N+", 1fr)";
 	board.style.gridTemplateColumns = "repeat("+N+", 1fr)";
 	for (var i = 0; i < N; i++) {
@@ -135,8 +142,10 @@ function placeKnight(r,c) {
 	userMoves.push([r,c]);
 	var img = document.createElement("i");
 	img.className="fas fa-chess-knight";
+	img.id=userMoves.length;
+	img.style.fontSize=squareDim*.60+"px";
+	img.style.lineHeight=squareDim+"px";
 	square.appendChild(img);
-	square.innerHTML += userMoves.length;
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
@@ -149,7 +158,7 @@ function placeKnight(r,c) {
 		var secondLastMove = userMoves[userMoves.length-2];
 		var lastSquare = document.getElementById(secondLastMove[0]+','+secondLastMove[1]);
 		lastSquare.style.borderColor = "black";
-		lastSquare.removeChild(lastSquare.firstChild);
+		lastSquare.innerHTML = userMoves.length-1;
 	}
 }
 
@@ -179,6 +188,12 @@ function removeKnight(r,c) {
 			}
 		}
 		document.getElementById(previousMove[0]+','+previousMove[1]).style.borderColor = "red";
+		document.getElementById(previousMove[0]+','+previousMove[1]).innerHTML="";
+		var img = document.createElement("i");
+		img.className="fas fa-chess-knight";
+		img.style.fontSize=squareDim*.60+"px";
+		img.style.lineHeight=squareDim+"px";
+		document.getElementById(previousMove[0]+','+previousMove[1]).appendChild(img);
 	}
 }
 

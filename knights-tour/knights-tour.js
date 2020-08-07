@@ -64,7 +64,7 @@ resetButton.onclick = function() {
 }
 
 completeButton.onclick = function() {
-	if (!findFullTour()) {
+	if (fullMoves.length != N*N) {
 		updateOutput();
 		return;
 	}
@@ -82,11 +82,7 @@ completeButton.onclick = function() {
 	}
 	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
 	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).innerHTML="";
-	var img = document.createElement("i");
-	img.className="fas fa-chess-knight";
-	img.style.fontSize=squareDim*.50+"px";
-	img.style.lineHeight=squareDim*.9+"px";
-	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).appendChild(img);
+	addKnightImg(fullMoves[N*N-1][0], fullMoves[N*N-1][1]);
 	userMoves = fullMoves.slice(0);
 	updateOutput();
 }
@@ -140,12 +136,7 @@ function placeKnight(r,c) {
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
 	userMoves.push([r,c]);
-	var img = document.createElement("i");
-	img.className="fas fa-chess-knight";
-	img.id=userMoves.length;
-	img.style.fontSize=squareDim*.50+"px";
-	img.style.lineHeight=squareDim*.9+"px";
-	square.appendChild(img);
+	addKnightImg(r,c);
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
@@ -189,11 +180,7 @@ function removeKnight(r,c) {
 		}
 		document.getElementById(previousMove[0]+','+previousMove[1]).style.borderColor = "red";
 		document.getElementById(previousMove[0]+','+previousMove[1]).innerHTML="";
-		var img = document.createElement("i");
-		img.className="fas fa-chess-knight";
-		img.style.fontSize=squareDim*.50+"px";
-		img.style.lineHeight=squareDim*.9+"px";
-		document.getElementById(previousMove[0]+','+previousMove[1]).appendChild(img);
+		addKnightImg(previousMove[0],previousMove[1]);
 	}
 }
 
@@ -211,15 +198,27 @@ function reachable(r,c) {
 	return false;
 }
 
+/* Append knight image to square (r,c). */
+function addKnightImg(r,c) {
+	var img = document.createElement("i");
+	img.className="fas fa-chess-knight";
+	img.id=userMoves.length;
+	img.style.fontSize=squareDim*.50+"px";
+	img.style.lineHeight=squareDim*.9+"px";
+	document.getElementById(r+','+c).appendChild(img);
+}
+
 /* -------- ! --------
-All functions below this point are used to find a full Knight's Tour after "complete tour" button
-is clicked.
+All functions below this point are used to find a full Knight's Tour from the user's moves so far
+to display whether there is a Knight's Tour in real time.
 */
 
 function isSafe(cBoard,r,c) {
 	return r >= 0 && r < N && c >= 0 && c < N && !cBoard[r][c];
 }
 
+/* Display number of knights used so far (userMoves length) and calculate full tour based on
+userMoves. */
 function updateOutput() {
 	var soFar = userMoves.length;
 	knightsUsedOutput.innerHTML = "KNIGHTS USED:<br>"+soFar+"/"+N*N;
@@ -230,11 +229,11 @@ function findFullTour() {
 	var soFar = userMoves.length;
 	fullMoves = userMoves.slice(0);
 	var tries = 0;
-	while (!warnsdorff() && tries < 10) {
+	while (!warnsdorff() && tries < 20) {
 		tries++;
 		fullMoves = userMoves.slice(0);
 	}
-	return tries < 10;
+	return tries < 20;
 }
 
 /* Return number of available moves from (r,c). */

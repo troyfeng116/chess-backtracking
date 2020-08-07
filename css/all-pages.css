@@ -16,10 +16,15 @@ body {
 	padding:10px;
 	position:absolute;
 	top:0;
+	margin:10px;
 }
 #head .left {
 	left:0;
 }
 #head .right {
 	right:0;
+}
+#head a:hover {
+	background-color:tan;
+	color:rgb(102,51,0);;
 }

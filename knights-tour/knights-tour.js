@@ -65,6 +65,7 @@ completeButton.onclick = function() {
 	var soFar = userMoves.length;
 	var tries = 0;
 	while (!warnsdorff() && tries < 10) {
+		submitButton.innerHTML += tries;
 		tries++;
 		userMoves = userMoves.slice(0,soFar+1);
 	}
@@ -73,6 +74,7 @@ completeButton.onclick = function() {
 		var c = userMoves[x-1][1];
 		document.getElementById(r+','+c).innerHTML = x;
 	}
+	updateOutput();
 }
 
 /* Generate NxN chessboard. */
@@ -124,7 +126,7 @@ function placeKnight(r,c) {
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
 	userMoves.push([r,c]);
-	square.innerHTML = 'K'+userMoves.length;
+	square.innerHTML = userMoves.length;
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
@@ -192,7 +194,7 @@ function isSafe(cBoard,r,c) {
 }
 
 function updateOutput() {
-	knightsUsedOutput.innerHTML = "KNIGHTS USED: "+moves.length+"/"+N*N;
+	knightsUsedOutput.innerHTML = "KNIGHTS USED: "+userMoves.length+"/"+N*N;
 }
 
 /* Return number of available moves from (r,c). */
@@ -215,10 +217,15 @@ function warnsdorff() {
 		}
 		boardCopy.push(row);
 	}
-	var lastMove = userMoves.length==0? [0,0] : userMoves.pop();
-	userMoves.push(lastMove);
-	var r = lastMove[0];
-	var c = lastMove[1];
+	if (userMoves.length == 0) {
+		var startR = Math.floor(Math.random()*N);
+		var startC = Math.floor(Math.random()*parseInt(N));
+		submitButton.innerHTML+=(startR+" "+startC+" "+N);
+		userMoves.push([startR,startC]);
+		boardCopy[startR][startC] = true;
+	}
+	var r = userMoves[userMoves.length-1][0];
+	var c = userMoves[userMoves.length-1][1];
 	for (var i = userMoves.length; i < N*N; i++) {
 		if (!search(boardCopy,r,c)) return false;
 		r = userMoves[userMoves.length-1][0];
@@ -235,6 +242,11 @@ function search(cBoard, r,c) {
 		var r2 = r+directions[i%8][0];
 		var c2 = c+directions[i%8][1];
 		if (isSafe(cBoard, r2, c2)) {
+			if (userMoves.length == N*N-1) {
+				userMoves.push([r2,c2]);
+				cBoard[r2][c2] = true;
+				return true;
+			}
 			var deg = getDegree(cBoard, r2,c2);
 			if (deg > 0 && deg < minDegree) {
 				minDegree = deg;

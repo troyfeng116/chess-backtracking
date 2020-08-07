@@ -13,8 +13,10 @@ var knightsUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
 var N;
-/* Moves holds the sequnece of (i,j) taken by user. */
-var moves;
+/* userMoves holds the sequnece of (i,j) taken by user. */
+var userMoves;
+/* fullMoves holds a sequence of (i,j) starting with userMoves, finishing the tour. */
+var fullMoves;
 var myBoard;
 
 const directions = [[2,1],[1,2],[-1,2],[-2,1],[-2,-1],[-1,-2],[1,-2],[2,-1]];
@@ -26,7 +28,7 @@ submitButton.onclick = function() {
 		return;
 	}
 	generateBoard();
-	moves=[];
+	userMoves=[];
 	myBoard=[];
 	for (var i = 0; i < N; i++) {
 		var row = [];
@@ -39,7 +41,7 @@ submitButton.onclick = function() {
 }
 
 backtrackButton.onclick = function() {
-	var lastMove = moves.pop();
+	var lastMove = userMoves.pop();
 	if (!lastMove) return;
 	removeKnight(lastMove[0],lastMove[1]);
 	updateOutput();
@@ -55,12 +57,22 @@ resetButton.onclick = function() {
 		}
 		myBoard[i].fill(false);
 	}
-	moves = [];
+	userMoves = [];
 	updateOutput();
 }
 
 completeButton.onclick = function() {
-	warnsdorff();
+	var soFar = userMoves.length;
+	var tries = 0;
+	while (!warnsdorff() && tries < 10) {
+		tries++;
+		userMoves = userMoves.slice(0,soFar+1);
+	}
+	for (var x = 1; x <= N*N; x++) {
+		var r = userMoves[x-1][0];
+		var c = userMoves[x-1][1];
+		document.getElementById(r+','+c).innerHTML = x;
+	}
 }
 
 /* Generate NxN chessboard. */
@@ -99,8 +111,8 @@ function setSquareClicks() {
 
 function placeKnight(r,c) {
 	if (!reachable(r,c)) return;
-	if (moves.length != 0) {
-		var previousMove = moves[moves.length-1];
+	if (userMoves.length != 0) {
+		var previousMove = userMoves[userMoves.length-1];
 		for (var i = 0; i < 8; i++) {
 			var r2 = previousMove[0]+directions[i][0];
 			var c2 = previousMove[1]+directions[i][1];
@@ -111,8 +123,8 @@ function placeKnight(r,c) {
 	}
 	var square = document.getElementById(r+','+c);
 	myBoard[r][c] = true;
-	moves.push([r,c]);
-	square.innerHTML = 'K'+moves.length;
+	userMoves.push([r,c]);
+	square.innerHTML = 'K'+userMoves.length;
 	square.style.borderColor = "red";
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
@@ -121,17 +133,18 @@ function placeKnight(r,c) {
 			document.getElementById(r2+','+c2).className += " reachable";
 		}
 	}
-	if (moves.length > 1) {
-		var lastSquare = document.getElementById(moves[moves.length-2][0]+','+moves[moves.length-2][1]);
+	if (userMoves.length > 1) {
+		var secondLastMove = userMoves[userMoves.length-2];
+		var lastSquare = document.getElementById(secondLastMove[0]+','+secondLastMove[1]);
 		lastSquare.style.borderColor = "black";
 	}
 }
 
 /* Given that there is a knight on (r,c), remove it. */
 function removeKnight(r,c) {
-	/* Temporarily place a knight at (r,c) and add (r,c) to moves for reachable function. */
+	/* Temporarily place a knight at (r,c) and add (r,c) to userMoves for reachable function. */
 	myBoard[r][c] = true;
-	moves.push([r,c]);
+	userMoves.push([r,c]);
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
 		var c2 = c+directions[i][1];
@@ -140,11 +153,11 @@ function removeKnight(r,c) {
 		}
 	}
 	myBoard[r][c] = false;
-	moves.pop();
+	userMoves.pop();
 	document.getElementById(r+','+c).innerHTML = "";
 	document.getElementById(r+','+c).style.borderColor = "black";
-	if (moves.length != 0) {
-		var previousMove = moves[moves.length-1];
+	if (userMoves.length != 0) {
+		var previousMove = userMoves[userMoves.length-1];
 		for (var i = 0; i < 8; i++) {
 			var r2 = previousMove[0]+directions[i][0];
 			var c2 = previousMove[1]+directions[i][1];
@@ -158,9 +171,9 @@ function removeKnight(r,c) {
 
 function reachable(r,c) {
 	if (r < 0 || r >= N || c < 0 || c >= N) return false;
-	if (moves.length == 0) return true;
+	if (userMoves.length == 0) return true;
 	if (myBoard[r][c]) return false;
-	var lastMove = moves[moves.length-1];
+	var lastMove = userMoves[userMoves.length-1];
 	for (var i = 0; i < 8; i++) {
 		if (r+directions[i][0] == lastMove[0] && c+directions[i][1] == lastMove[1]) {
 			return true;
@@ -169,8 +182,13 @@ function reachable(r,c) {
 	return false;
 }
 
-function isSafe(r,c) {
-	return r >= 0 && r < N && c >= 0 && c < N && !myBoard[r][c];
+/* -------- ! --------
+All functions below this point are used to find a full Knight's Tour after "complete tour" button
+is clicked.
+*/
+
+function isSafe(cBoard,r,c) {
+	return r >= 0 && r < N && c >= 0 && c < N && !cBoard[r][c];
 }
 
 function updateOutput() {
@@ -178,38 +196,46 @@ function updateOutput() {
 }
 
 /* Return number of available moves from (r,c). */
-function getDegree(r,c) {
+function getDegree(cBoard,r,c) {
 	var count = 0;
 	for (var i = 0; i < 8; i++) {
 		var r2 = r+directions[i][0];
 		var c2 = c+directions[i][1];
-		if (isSafe(r2,c2)) count++;
+		if (isSafe(cBoard,r2,c2)) count++;
 	}
 	return count;
 }
 
 function warnsdorff() {
-	var lastMove = moves.length==0? [0,0] : moves[moves.length-1];
+	var boardCopy = [];
+	for (var i = 0; i < N; i++) {
+		var row = [];
+		for (var j = 0; j < N; j++) {
+			row.push(myBoard[i][j]);
+		}
+		boardCopy.push(row);
+	}
+	var lastMove = userMoves.length==0? [0,0] : userMoves.pop();
+	userMoves.push(lastMove);
 	var r = lastMove[0];
 	var c = lastMove[1];
-	for (var i = moves.length; i <= N*N; i++) {
-		if (!search(r,c)) return false;
-		r = moves[moves.length-1][0];
-		c = moves[moves.length-1][1];
-		document.getElementById(r+','+c).innerHTML = 'K'+moves.length;
+	for (var i = userMoves.length; i < N*N; i++) {
+		if (!search(boardCopy,r,c)) return false;
+		r = userMoves[userMoves.length-1][0];
+		c = userMoves[userMoves.length-1][1];
 	}
 	return true;
 }
 
-function search(r,c) {
+function search(cBoard, r,c) {
 	var minDir = -1;
 	var minDegree = 9;
 	var start = Math.floor(Math.random()*(9));
 	for (var i = start; i < start+8; i++) {
 		var r2 = r+directions[i%8][0];
 		var c2 = c+directions[i%8][1];
-		if (isSafe(r2, c2)) {
-			var deg = getDegree(r2,c2);
+		if (isSafe(cBoard, r2, c2)) {
+			var deg = getDegree(cBoard, r2,c2);
 			if (deg > 0 && deg < minDegree) {
 				minDegree = deg;
 				minDir = i%8;
@@ -219,8 +245,8 @@ function search(r,c) {
 	if (minDir == -1) return false;
 	var rMin = r+directions[minDir][0];
 	var cMin = c+directions[minDir][1]
-	moves.push([rMin,cMin]);
-	myBoard[rMin][cMin] = true;
+	userMoves.push([rMin,cMin]);
+	cBoard[rMin][cMin] = true;
 	return true;
 }
 

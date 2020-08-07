@@ -30,6 +30,7 @@ submitButton.onclick = function() {
 	}
 	generateBoard();
 	userMoves=[];
+	fullMoves=[];
 	myBoard=[];
 	for (var i = 0; i < N; i++) {
 		var row = [];
@@ -63,15 +64,13 @@ resetButton.onclick = function() {
 }
 
 completeButton.onclick = function() {
-	var soFar = userMoves.length;
-	var tries = 0;
-	while (!warnsdorff() && tries < 10) {
-		tries++;
-		userMoves = userMoves.slice(0,soFar+1);
+	if (!findFullTour()) {
+		updateOutput();
+		return;
 	}
-	for (var x = Math.max(soFar,1); x <= N*N; x++) {
-		var r = userMoves[x-1][0];
-		var c = userMoves[x-1][1];
+	for (var x = Math.max(userMoves.length,1); x <= N*N; x++) {
+		var r = fullMoves[x-1][0];
+		var c = fullMoves[x-1][1];
 		myBoard[r][c] = true;
 		document.getElementById(r+','+c).innerHTML = x;
 	}
@@ -81,13 +80,14 @@ completeButton.onclick = function() {
 			document.getElementById(i+','+j).style.borderColor = "black";
 		}
 	}
-	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).style.borderColor="red";
-	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).innerHTML="";
+	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
+	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).innerHTML="";
 	var img = document.createElement("i");
 	img.className="fas fa-chess-knight";
 	img.style.fontSize=squareDim*.50+"px";
 	img.style.lineHeight=squareDim*.9+"px";
-	document.getElementById(userMoves[N*N-1][0]+','+userMoves[N*N-1][1]).appendChild(img);
+	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).appendChild(img);
+	userMoves = fullMoves.slice(0);
 	updateOutput();
 }
 
@@ -221,7 +221,20 @@ function isSafe(cBoard,r,c) {
 }
 
 function updateOutput() {
-	knightsUsedOutput.innerHTML = "KNIGHTS USED:<br>"+userMoves.length+"/"+N*N;
+	var soFar = userMoves.length;
+	knightsUsedOutput.innerHTML = "KNIGHTS USED:<br>"+soFar+"/"+N*N;
+	solutionsOutput.innerHTML = findFullTour()? "TOUR EXISTS: YES" : "TOUR EXISTS: NO";
+}
+
+function findFullTour() {
+	var soFar = userMoves.length;
+	fullMoves = userMoves.slice(0);
+	var tries = 0;
+	while (!warnsdorff() && tries < 10) {
+		tries++;
+		fullMoves = userMoves.slice(0);
+	}
+	return tries < 10;
 }
 
 /* Return number of available moves from (r,c). */
@@ -244,18 +257,18 @@ function warnsdorff() {
 		}
 		boardCopy.push(row);
 	}
-	if (userMoves.length == 0) {
+	if (fullMoves.length == 0) {
 		var startR = Math.floor(Math.random()*N);
 		var startC = Math.floor(Math.random()*parseInt(N));
-		userMoves.push([startR,startC]);
+		fullMoves.push([startR,startC]);
 		boardCopy[startR][startC] = true;
 	}
-	var r = userMoves[userMoves.length-1][0];
-	var c = userMoves[userMoves.length-1][1];
-	for (var i = userMoves.length; i < N*N; i++) {
+	var r = fullMoves[fullMoves.length-1][0];
+	var c = fullMoves[fullMoves.length-1][1];
+	for (var i = fullMoves.length; i < N*N; i++) {
 		if (!search(boardCopy,r,c)) return false;
-		r = userMoves[userMoves.length-1][0];
-		c = userMoves[userMoves.length-1][1];
+		r = fullMoves[fullMoves.length-1][0];
+		c = fullMoves[fullMoves.length-1][1];
 	}
 	return true;
 }
@@ -268,8 +281,8 @@ function search(cBoard, r,c) {
 		var r2 = r+directions[i%8][0];
 		var c2 = c+directions[i%8][1];
 		if (isSafe(cBoard, r2, c2)) {
-			if (userMoves.length == N*N-1) {
-				userMoves.push([r2,c2]);
+			if (fullMoves.length == N*N-1) {
+				fullMoves.push([r2,c2]);
 				cBoard[r2][c2] = true;
 				return true;
 			}
@@ -283,7 +296,7 @@ function search(cBoard, r,c) {
 	if (minDir == -1) return false;
 	var rMin = r+directions[minDir][0];
 	var cMin = c+directions[minDir][1]
-	userMoves.push([rMin,cMin]);
+	fullMoves.push([rMin,cMin]);
 	cBoard[rMin][cMin] = true;
 	return true;
 }

@@ -17,7 +17,7 @@
 }
 #board div {
 	text-align:center;
-	font-size:30px;
+	font-size:20px;
 	text-decoration:none;
 	display:block;
 	color:black;
@@ -62,10 +62,17 @@
 	left:75%;
 }
 
+/* Style complete tour button */
+#completeButton {
+	position:absolute;
+	top:50%;
+	left:75%;
+}
+
 /* Style output container */
 #outputContainer {
 	position:absolute;
-	top:50%;
+	top:60%;
 	left:75%;
 }
 #output1, #output2 {

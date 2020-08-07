@@ -37,9 +37,13 @@
 #board .unavailable:hover {
 	cursor:not-allowed;
 }
-
 #board .reachable {
 	background-color:green;
+}
+#board i {
+	display:block;
+    text-align:center;
+	color:green;
 }
 
 /* Style reset button */ 

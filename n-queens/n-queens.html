@@ -12,10 +12,20 @@
 	<div id="head">
 		<h1>N QUEENS VISUALIZER</h1>
 		<a href="../index.html" class="right">Home</a>
+		<div id="instrHover" class="left">INSTRUCTIONS</div>
+		<div id="instrContainer">
+			<h2>INSTRUCTIONS:</h2>
+			Enter N, the desired height and width of the chess board, and hit "Submit".<br><br>
+			Your goal is to place N queens on the board, such that no two queens are attacking each other.<br><br>
+			Click squares on the board to place queens. Squares that are under attack by another queen will be highlighted in red.<br><br>
+			The number of queens placed, as well as the number of ways to safely placed N queens given the queens you have already placed, will be updated in real time on the bottom left.<br><br>
+			Press "Reset board" to fully clear the board of all queens.<br><br>
+			Press "Backtrack" to take back your previous move (i.e. remove the previously placed queen).<br><br>
+		</div>
 	</div>
 
 	<hr>
-	
+
 	<div id="inputContainer">
 		<label for="dim">Enter N.</label><br>
 		<input type="text" id="dimReader" name="dim"><br>

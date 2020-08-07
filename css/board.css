@@ -16,9 +16,11 @@
 	border:1px solid black;
 }
 #board div {
+	text-align:center;
+	font-size:30px;
 	text-decoration:none;
 	display:block;
-	color:red;
+	color:black;
 	border:1px solid black;
 }
 #board div:hover {

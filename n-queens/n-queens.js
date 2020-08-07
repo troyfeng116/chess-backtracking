@@ -11,6 +11,7 @@ var queensUsedOutput = document.getElementById("output1");
 var solutionsOutput = document.getElementById("output2");
 
 var N;
+var squareDim;
 /* Moves holds the sequnece of (i,j) taken by user. */
 var moves;
 /* rowHasQueen[i] is true if i'th row of board has queen. */
@@ -68,9 +69,9 @@ function generateBoard() {
 	while (board.firstChild) {
 		board.removeChild(board.firstChild);
 	}
-	var scale = N<=6? 100 : (600/N);
-	board.style.width = scale*N+"px";
-	board.style.height = scale*N+"px";
+	squareDim = N<=6? 100 : (600/N);
+	board.style.width = squareDim*N+"px";
+	board.style.height = squareDim*N+"px";
 	board.style.gridTemplateRows = "repeat("+N+", 1fr)";
 	board.style.gridTemplateColumns = "repeat("+N+", 1fr)";
 	for (var i = 0; i < N; i++) {
@@ -110,7 +111,11 @@ function resetSquare(row,col) {
 /* Given that it's safe to do so, place queen at (row,col). */
 function placeQueen(row,col) {
 	var square = document.getElementById(row+','+col);
-	square.innerHTML = "Q";
+	var img = document.createElement("i");
+	img.className="fas fa-chess-queen";
+	img.style.fontSize=squareDim*.60+"px";
+	img.style.lineHeight=squareDim+"px";
+	square.appendChild(img);
 	myBoard[row][col] = true;
 	rowHasQueen[row] = true;
 	for (var dist = 1; dist < N; dist++) {

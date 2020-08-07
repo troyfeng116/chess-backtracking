@@ -221,8 +221,8 @@ function isSafe(cBoard,r,c) {
 userMoves. */
 function updateOutput() {
 	var soFar = userMoves.length;
-	knightsUsedOutput.innerHTML = "KNIGHTS USED:<br>"+soFar+"/"+N*N;
-	solutionsOutput.innerHTML = findFullTour()? "TOUR EXISTS: YES" : "TOUR EXISTS: NO";
+	knightsUsedOutput.innerHTML = soFar+"/"+N*N;
+	solutionsOutput.innerHTML = findFullTour()? "YES" : "NO";
 }
 
 function findFullTour() {

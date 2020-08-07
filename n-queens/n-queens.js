@@ -145,8 +145,8 @@ function removeQueen(row,col) {
 
 /* Update output container with #queens used and #solutions left. */
 function updateOutput() {
-	queensUsedOutput.innerHTML = "QUEENS USED: "+moves.length+"/"+N;
-	solutionsOutput.innerHTML = "POSSIBLE SOLUTIONS: "+numSolutionsLeft();
+	queensUsedOutput.innerHTML = moves.length+"/"+N;
+	solutionsOutput.innerHTML = numSolutionsLeft();
 }
 
 /* Return true if no queen is on or attacking (row,col). */

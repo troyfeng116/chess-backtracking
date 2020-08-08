@@ -51,7 +51,7 @@ body {
 	display:inline-block;
 }
 
-#nQueensDesc, #knightsTourDesc {
+.desc {
 	width:30%;
 	position:absolute;
 	top:25%;
@@ -64,4 +64,15 @@ body {
 }
 #knightsTourDesc {
 	left:80%;
+}
+#overallDesc {
+	width:20%;
+	left:50%;
+	font-size:21px;
+	text-align:center
+}
+#overallDesc a {
+	text-decoration:none;
+	color:white;
+	font-size:16px;
 }

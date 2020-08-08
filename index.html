@@ -9,17 +9,26 @@
 
 <body>
 	<div id="head">
-		<a href="n-queens/n-queens.html" class="left">N Queens</a>
+		<a href="n-queens/n-queens.html" class="left"><i class="fas fa-arrow-circle-left"></i> N Queens</a>
 		<h1>CHESS BACKTRACKING VISUALIZERS</h1>
-		<a href="knights-tour/knights-tour.html" class="right">Knight's Tour</a>
+		<a href="knights-tour/knights-tour.html" class="right">Knight's Tour <i class="fas fa-arrow-circle-right"></i></a>
 	</div>
 
 	<hr>
 
-	<div id="nQueensDesc">N QUEENS DESCRIPTION</div>
+	<div id="nQueensDesc">
+		In the N queens puzzle, the goal is to place N queens onto an NxN chess board such that no two queens are attacking each other.
+		<br><br>
+		The N Queens problem asks how many ways there are to place N queens in this way onto an NxN board. It is a classic exercise in backtracking. In my visualizer, you may place a queen on any square by clicking, except for squares that are already attacked by other queens, which will be marked. The number of queens you have placed will be tracked and displayed. Also, the number of possible solutions, given the queens you have placed so far, will be calculated using a straightforward backtracking algorithm and displayed in real time.
+	</div>
 
-	<div id="knightsTourDesc">KNIGHT'S TOUR DESCRIPTION</div>
-	
+	<div id="knightsTourDesc">
+		To complete the Knight's Tour puzzle, you must find a way to move a knight N<sup>2</sup> times on an NxN chessboard such that the knight visits all N<sup>2</sup> squares exactly once, that is without missing or revisiting any square.
+		<br><br>
+		In my visualizer, you may set the size of the board, and then click squares to place and move knights. Possible next moves will be highlighted. The number of moves you have taken will be tracked. In addition, my algorithm continuously searches for a complete tour as you continue to make moves using the Warnsdorff heuristic, and displays whether a complete tour has been found. Because the heuristic is non-deterministic, this display of whether a complete tour exists may be wrong, i.e. it may incorrectly display "no tour exists" for some configurations of moves where a tour does in fact exist.
+	</div>
+
+	<script src="https://kit.fontawesome.com/3059e8df3b.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

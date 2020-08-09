@@ -4,11 +4,15 @@
 	top:60%;
 	left:75%;
 	visibility:hidden;
+	float:left;
 }
-
-/* Style slider */
+#stopButton {
+	background-color:tan;
+	color:rgb(102,51,0);
+	float:right;
+}
 
 /* Style output container */
 #outputContainer {
-	top:85%;
+	top:90%;
 }

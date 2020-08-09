@@ -80,7 +80,7 @@
 	text-transform:uppercase;
 	color:rgb(102,51,0);
 }
-#backtrackButton:hover, #resetButton:hover, #completeButton:hover {
+#backtrackButton:hover, #resetButton:hover, #completeButton:hover, #stopButton:hover {
 	background-color:white;
 	color:rgb(0,30,80);
 	cursor:pointer;

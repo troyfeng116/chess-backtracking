@@ -7,8 +7,12 @@ var resetButton = document.getElementById("resetButton");
 
 var backtrackButton = document.getElementById("backtrackButton");
 
+var completeContainer = document.getElementById("completeContainer");
 var completeButton = document.getElementById("completeButton");
+
 var speedSlider = document.getElementById("speedSlider");
+var speedOutput = document.getElementById("speedOutput");
+var stopButton = document.getElementById("stopButton");
 
 var outputContainer = document.getElementById("outputContainer");
 var knightsUsedOutput = document.getElementById("output1");
@@ -20,11 +24,16 @@ var squareDim;
 var userMoves;
 /* fullMoves holds a sequence of (i,j) starting with userMoves, finishing the tour. */
 var fullMoves;
+/* Store the step speed, in ms. */
+var stepSpeed = 1000;
+/* If stop, then we stop the delayed knight placement in complete board feature. */
+let stop = false;
 var myBoard;
 
 const directions = [[2,1],[1,2],[-1,2],[-2,1],[-2,-1],[-1,-2],[1,-2],[2,-1]];
 
 submitButton.onclick = function() {
+	stop = true;
 	N = dimReader.value;
 	if (isNaN(N) || N < 1 || N > 13 || N%1 != 0) {
 		alert("N must be between 1 and 13");
@@ -45,12 +54,12 @@ submitButton.onclick = function() {
 	board.style.visibility = "visible";
 	resetButton.style.visibility = "visible";
 	backtrackButton.style.visibility = "visible";
-	completeButton.style.visibility = "visible";
+	completeContainer.style.visibility = "visible";
 	outputContainer.style.visibility = "visible";
-	speedSlider.style.visibility = "visible";
 }
 
 backtrackButton.onclick = function() {
+	stop = true;
 	if (isNaN(N)) return;
 	var lastMove = userMoves.pop();
 	if (!lastMove) return;
@@ -59,6 +68,7 @@ backtrackButton.onclick = function() {
 }
 
 resetButton.onclick = function() {
+	stop = true;
 	if (isNaN(N)) return;
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
@@ -73,34 +83,38 @@ resetButton.onclick = function() {
 	updateOutput();
 }
 
+speedSlider.oninput = function() {
+	speedOutput.innerHTML = "SPEED: " + this.value/1000 + "s";
+	stepSpeed = this.value;
+}
+
 completeButton.onclick = function() {
+	stop = false;
 	if (isNaN(N)) return;
 	if (fullMoves.length != N*N) {
 		updateOutput();
 		return;
 	}
-	for (var i = 0; i < N; i++) {
-		for (var j = 0; j < N; j++) {
-			document.getElementById(i+','+j).className = (i+j)%2==0? "whiteSquares" : "blackSquares";
-			document.getElementById(i+','+j).style.borderColor = "white";
-		}
-	}
 	var start = Math.max(userMoves.length+1,1);
-	for (let x = start; x <= N*N; x++) {
-		/*var r = fullMoves[x-1][0];
-		var c = fullMoves[x-1][1];*/
-		/*myBoard[r][c] = true;
-		document.getElementById(r+','+c).innerHTML = x;*/		
-		delayPlaceKnight(fullMoves[x-1][0],fullMoves[x-1][1], x-start+1);
-	}
-	//document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
-	//document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).innerHTML="";
-	//addKnightImg(fullMoves[N*N-1][0], fullMoves[N*N-1][1]);
-	//userMoves = fullMoves.slice(0);
+	counter = start;
+	delayCompleteTour();
 }
 
-function delayPlaceKnight(r,c,x) {
-	setTimeout(function() {placeKnight(r,c)}, 100*x);
+/* Loop through fullMoves and place knights, with delay. */
+var counter;
+function delayCompleteTour() {
+	setTimeout(function() {
+		if (stop) return;
+		placeKnight(fullMoves[counter-1][0],fullMoves[counter-1][1]);
+		counter++;
+		if (counter <= N*N) {
+			delayCompleteTour();
+		}
+	}, stepSpeed);
+}
+
+stopButton.onclick = function() {
+	stop = true;
 }
 
 /* Generate NxN chessboard. */

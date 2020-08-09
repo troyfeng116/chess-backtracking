@@ -1,0 +1,14 @@
+/* Style complete tour button */
+#completeContainer {
+	position:absolute;
+	top:60%;
+	left:75%;
+	visibility:hidden;
+}
+
+/* Style slider */
+
+/* Style output container */
+#outputContainer {
+	top:85%;
+}

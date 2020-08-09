@@ -70,14 +70,6 @@
 	visibility:hidden;
 }
 
-/* Style complete tour button */
-#completeButton {
-	position:absolute;
-	top:60%;
-	left:75%;
-	visibility:hidden;
-}
-
 /* Additional button styling */
 #backtrackButton, #resetButton, #completeButton {
 	display:block;
@@ -98,7 +90,7 @@
 /* Style output container */
 #outputContainer {
 	position:absolute;
-	top:80%;
+	top:70%;
 	left:75%;
 	visibility:hidden;
 }

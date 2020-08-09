@@ -27,7 +27,7 @@ var fullMoves;
 /* Store the step speed, in ms. */
 var stepSpeed = 1000;
 /* If stop, then we stop the delayed knight placement in complete board feature. */
-let stop = false;
+let stop = true;
 var myBoard;
 
 const directions = [[2,1],[1,2],[-1,2],[-2,1],[-2,-1],[-1,-2],[1,-2],[2,-1]];
@@ -144,6 +144,7 @@ function setSquareClicks() {
 		for (var j = 0; j < N; j++) {
 			let x = i, y = j;
 			document.getElementById(x+','+y).onclick = function() {
+				stop = true;
 				placeKnight(x,y);
 				updateOutput();
 			}
@@ -253,7 +254,7 @@ userMoves. */
 function updateOutput() {
 	var soFar = userMoves.length;
 	knightsUsedOutput.innerHTML = soFar+"/"+N*N;
-	if (soFar == N*N) {
+	if (soFar == N*N || !stop) {
 		return;
 	}
 	solutionsOutput.innerHTML = findFullTour()? "YES" : "NO";

@@ -8,6 +8,7 @@ var resetButton = document.getElementById("resetButton");
 var backtrackButton = document.getElementById("backtrackButton");
 
 var completeButton = document.getElementById("completeButton");
+var speedSlider = document.getElementById("speedSlider");
 
 var outputContainer = document.getElementById("outputContainer");
 var knightsUsedOutput = document.getElementById("output1");
@@ -46,6 +47,7 @@ submitButton.onclick = function() {
 	backtrackButton.style.visibility = "visible";
 	completeButton.style.visibility = "visible";
 	outputContainer.style.visibility = "visible";
+	speedSlider.style.visibility = "visible";
 }
 
 backtrackButton.onclick = function() {

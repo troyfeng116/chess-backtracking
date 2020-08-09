@@ -77,23 +77,28 @@ completeButton.onclick = function() {
 		updateOutput();
 		return;
 	}
-	for (var x = Math.max(userMoves.length,1); x <= N*N; x++) {
-		var r = fullMoves[x-1][0];
-		var c = fullMoves[x-1][1];
-		myBoard[r][c] = true;
-		document.getElementById(r+','+c).innerHTML = x;
-	}
 	for (var i = 0; i < N; i++) {
 		for (var j = 0; j < N; j++) {
 			document.getElementById(i+','+j).className = (i+j)%2==0? "whiteSquares" : "blackSquares";
 			document.getElementById(i+','+j).style.borderColor = "white";
 		}
 	}
-	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
-	document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).innerHTML="";
-	addKnightImg(fullMoves[N*N-1][0], fullMoves[N*N-1][1]);
-	userMoves = fullMoves.slice(0);
-	updateOutput();
+	var start = Math.max(userMoves.length+1,1);
+	for (let x = start; x <= N*N; x++) {
+		/*var r = fullMoves[x-1][0];
+		var c = fullMoves[x-1][1];*/
+		/*myBoard[r][c] = true;
+		document.getElementById(r+','+c).innerHTML = x;*/		
+		delayPlaceKnight(fullMoves[x-1][0],fullMoves[x-1][1], x-start+1);
+	}
+	//document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).style.borderColor="red";
+	//document.getElementById(fullMoves[N*N-1][0]+','+fullMoves[N*N-1][1]).innerHTML="";
+	//addKnightImg(fullMoves[N*N-1][0], fullMoves[N*N-1][1]);
+	//userMoves = fullMoves.slice(0);
+}
+
+function delayPlaceKnight(r,c,x) {
+	setTimeout(function() {placeKnight(r,c)}, 100*x);
 }
 
 /* Generate NxN chessboard. */
@@ -160,6 +165,7 @@ function placeKnight(r,c) {
 		lastSquare.style.borderColor = "white";
 		lastSquare.innerHTML = userMoves.length-1;
 	}
+	updateOutput();
 }
 
 /* Given that there is a knight on (r,c), remove it (backtrack). */
@@ -193,7 +199,7 @@ function removeKnight(r,c) {
 	}
 }
 
-/* Return true if (r,c) is reachable from current pos. */
+/* Return true if (r,c) is reachable from last user move. */
 function reachable(r,c) {
 	if (r < 0 || r >= N || c < 0 || c >= N) return false;
 	if (userMoves.length == 0) return true;
@@ -231,11 +237,13 @@ userMoves. */
 function updateOutput() {
 	var soFar = userMoves.length;
 	knightsUsedOutput.innerHTML = soFar+"/"+N*N;
+	if (soFar == N*N) {
+		return;
+	}
 	solutionsOutput.innerHTML = findFullTour()? "YES" : "NO";
 }
 
 function findFullTour() {
-	var soFar = userMoves.length;
 	fullMoves = userMoves.slice(0);
 	var tries = 0;
 	while (!warnsdorff() && tries < 20) {

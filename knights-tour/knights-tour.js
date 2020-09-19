@@ -131,6 +131,8 @@ function generateBoard() {
 		for (var j = 0; j < N; j++) {
 			var square = document.createElement("div");
 			square.className = (i+j)%2==0 ? "whiteSquares" : "blackSquares";
+			square.style.lineHeight = squareDim-2+"px";
+			square.style.fontSize=squareDim*.50+"px";
 			square.id=i+','+j;
 			board.appendChild(square);
 		}
@@ -235,8 +237,6 @@ function addKnightImg(r,c) {
 	var img = document.createElement("i");
 	img.className="fas fa-chess-knight";
 	img.id=userMoves.length;
-	img.style.fontSize=squareDim*.50+"px";
-	img.style.lineHeight=squareDim*.9+"px";
 	document.getElementById(r+','+c).appendChild(img);
 }
 

@@ -7,7 +7,6 @@ body {
     text-align: center;
 	font-size:20px;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 }
 
@@ -24,7 +23,6 @@ body {
 
 .left, .right {
 	white-space: nowrap;
-	display: flex;
 }
 
 #head a:hover {
@@ -53,4 +51,30 @@ body {
 
 #instrHover:hover + #instrContainer {
 	display:inline-block;
+}
+
+/* Small screens */
+@media only screen and (max-width: 840px) {
+	#head {
+		flex-direction: column;
+	}
+	
+	.hide-when-small {
+		display: none;
+	}
+
+	hr {
+		width: 100%;
+	}
+}
+
+/* Large screens */
+@media only screen and (min-width: 840px) {
+	#head {
+		justify-content: space-between;
+	}
+
+	.hide-when-large {
+        display: none;
+    }
 }

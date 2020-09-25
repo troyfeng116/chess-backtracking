@@ -5,8 +5,12 @@ body {
 
 #head {
     text-align: center;
-    font-size:20px;
+	font-size:20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
+
 #head a,#instrHover {
 	display:block;
 	color:white;
@@ -14,24 +18,24 @@ body {
 	font-size:20px;
 	border:1px solid;
 	padding:10px;
-	position:absolute;
-	top:0;
 	margin:10px;
 	text-transform:uppercase;
 }
-#head .left {
-	left:0;
+
+.left, .right {
+	white-space: nowrap;
+	display: flex;
 }
-#head .right {
-	right:0;
-}
+
 #head a:hover {
 	background-color:tan;
 	color:rgb(102,51,0);
 }
+
 #instrHover {
 	font-size:15px;
 }
+
 #instrContainer {
 	display:none;
 	text-align:left;
@@ -46,35 +50,7 @@ body {
 	background-color:tan;
 	color:rgb(102,51,0);
 }
+
 #instrHover:hover + #instrContainer {
 	display:inline-block;
-}
-
-.desc {
-	width:30%;
-	position:absolute;
-	top:25%;
-	transform:translate(-50%,0);
-	text-align:left;
-	font-size:18px;
-}
-#nQueensDesc {
-	left:20%;
-}
-#knightsTourDesc {
-	left:80%;
-}
-#overallDesc {
-	width:20%;
-	left:50%;
-	font-size:21px;
-	text-align:center;
-	background-color:tan;
-	color:rgb(102,51,0);
-	padding:10px;
-}
-#overallDesc a {
-	text-decoration:none;
-	color:rgb(102,51,0);
-	font-size:16px;
 }

@@ -1,18 +1,20 @@
 /* Style complete tour button */
 #completeContainer {
-	position:absolute;
-	top:60%;
-	left:75%;
 	visibility:hidden;
-	float:left;
+	margin-bottom: 20px;
 }
+
+.complete-sub-container {
+	display: flex;
+	justify-content: space-between;
+}
+
 #stopButton {
 	background-color:tan;
 	color:rgb(102,51,0);
-	float:right;
 }
 
 /* Style output container */
 #outputContainer {
-	top:90%;
+
 }

@@ -27,27 +27,35 @@
 
 	<hr>
 
-	<div id="inputContainer">
-		<label for="dim">Enter N.</label><br>
-		<input type="text" id="dimReader" name="dim"><br>
-		<button id="submitButton">Submit</button>
-	</div>
-
-	<div id="board"></div>
-
-	<div id="resetContainer">
-		<button id="resetButton">Reset board</button>
-	</div>
-
-	<div id="backtrackContainer">
-		<button id="backtrackButton">Backtrack</button>
-	</div>
-
-	<div id="outputContainer">
-		QUEENS USED:<br>
-		<div id="output1"></div><br><br>
-		POSSIBLE SOLUTIONS:<br>
-		<div id="output2"></div>
+	<div class="column-container">
+		<div class="first-column">
+			<div id="inputContainer">
+				<label for="dim">Enter N.</label><br>
+				<input type="text" id="dimReader" name="dim"><br>
+				<button id="submitButton">Submit</button>
+			</div>
+		</div>
+		
+		<div class="second-column">
+			<div id="board"></div>
+		</div>
+	
+		<div class="third-column">
+			<div id="resetContainer">
+				<button id="resetButton">Reset board</button>
+			</div>
+		
+			<div id="backtrackContainer">
+				<button id="backtrackButton">Backtrack</button>
+			</div>
+		
+			<div id="outputContainer">
+				QUEENS USED:<br>
+				<div id="output1"></div><br><br>
+				POSSIBLE SOLUTIONS:<br>
+				<div id="output2"></div>
+			</div>
+		</div>
 	</div>
 
 	<script src="n-queens.js" type="text/javascript"></script>

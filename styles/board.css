@@ -1,3 +1,32 @@
+.column-container {
+	margin: 40px 0;
+	display: flex;
+	justify-content: center;
+}
+
+.first-column {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.second-column {
+	flex: 5;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.third-column {
+	flex: 3;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 /* Style input container */
 #inputContainer {
 	padding:10px;
@@ -5,23 +34,17 @@
 	display:inline-block;
 	background-color:tan;
 	color:rgb(102,51,0);
-	position:absolute;
-	top:40%;
-	left:10px;
-	transform:translate(0,-50%);
+	width: fit-content;
+	margin: auto;
 }
 
 /* Style board */
 #board {
 	display:grid;
-	position:absolute;
-	top:65%;
-	left:40%;
-	transform:translate(-50%,-50%);
-	margin:50px;
 	border:1px solid white;
 	visibility:hidden;
 }
+
 #board div {
 	text-align:center;
 	font-size:20px;
@@ -29,25 +52,32 @@
 	color:red;
 	border:1px solid white;
 }
+
 #board div:hover {
 	cursor:pointer;
 }
+
 #board .whiteSquares {
 	background-color:tan;
 }
+
 #board .blackSquares {
 	background-color:rgb(102,51,0);
 }
+
 #board .unavailable {
 	background-color:red;
 	opacity:50%;
 }
+
 #board .unavailable:hover {
 	cursor:not-allowed;
 }
+
 #board .reachable {
 	background-color:green;
 }
+
 #board div i {
 	padding:0px;
     text-align:center;
@@ -56,22 +86,17 @@
 
 /* Style reset button */ 
 #resetContainer {
-	position:absolute;
-	top:20%;
-	left:75%;
-	visibility:hidden;
+	visibility: hidden;
 }
 
 /* Style backtrack button */ 
 #backtrackContainer {
-	position:absolute;
-	top:40%;
-	left:75%;
 	visibility:hidden;
 }
 
 /* Additional button styling */
 #backtrackButton, #resetButton, #completeButton {
+	margin-bottom: 20px;
 	display:block;
 	height:75px;
 	width:200px;
@@ -80,6 +105,7 @@
 	text-transform:uppercase;
 	color:rgb(102,51,0);
 }
+
 #backtrackButton:hover, #resetButton:hover, #completeButton:hover, #stopButton:hover {
 	background-color:white;
 	color:rgb(0,30,80);
@@ -89,11 +115,9 @@
 
 /* Style output container */
 #outputContainer {
-	position:absolute;
-	top:70%;
-	left:75%;
 	visibility:hidden;
 }
+
 #output1, #output2 {
 	font-size:36px;
 }
